@@ -9,13 +9,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8094" basePath="/" doc:name="HTTP Listener Configuration"/>
     <db:oracle-config name="Oracle_Configuration" host="tesst.com" port="1521" instance="sid" user="sudhir" password="sudhir" doc:name="Oracle Configuration">
-        <db:pooling-profile maxPoolSize="10"/>
+        <db:pooling-profile maxPoolSize="10" minPoolSize="0"/>
     </db:oracle-config>
     <flow name="sonar-code-test-cicd-v3Flow">
         <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
         <set-payload value="testOutput" doc:name="Set Payload"/>
-        <set-property propertyName="http.status" value="200" doc:name="Property"/>
-        <set-property propertyName="http.reason" value="user created" doc:name="Property"/>
         <db:insert config-ref="Oracle_Configuration" doc:name="Database">
             <db:dynamic-query/>
         </db:insert>
