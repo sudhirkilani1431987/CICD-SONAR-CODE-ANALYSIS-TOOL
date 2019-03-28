@@ -13,7 +13,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<mule.version>3.8.5</mule.version>
-    	<mule.tools.version>1.2</mule.tools.version>
+    	<mule.tools.version>1.7</mule.tools.version>
 	</properties>
 
 	<build>
@@ -53,6 +53,47 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>mule-app-maven-plugin</artifactId>
+				<version>${mule.tools.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<copyToAppsDirectory>true</copyToAppsDirectory>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.mule.tools.maven</groupId>
+				<artifactId>mule-maven-plugin</artifactId>
+				<version>2.2.1</version>
+				<configuration>
+					<deploymentType>cloudhub</deploymentType>
+					<muleVersion>3.8.5</muleVersion>
+					<!-- Set these properties in your Maven settings.xml file -->
+					<username>sudhirkilanimule1</username>
+					<password>Mulesoft@12345</password>
+					<target>CloudHub</target>
+					<targetType>server</targetType>
+					<environment>Sandbox</environment>
+					<workerType>Micro</workerType>
+				</configuration>
+				<executions>
+					<execution>
+						<id>deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
