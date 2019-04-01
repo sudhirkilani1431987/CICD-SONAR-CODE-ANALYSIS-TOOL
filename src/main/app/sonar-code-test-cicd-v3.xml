@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd">
     <http:listener-config name="HTTP_Listener_Configuration" host="0.0.0.0" port="8094" basePath="/" doc:name="HTTP Listener Configuration"/>
     <db:oracle-config name="Oracle_Configuration" host="tesst.com" port="1521" instance="sid" user="sudhir" password="sudhir" doc:name="Oracle Configuration">
         <db:pooling-profile maxPoolSize="10" minPoolSize="0"/>
     </db:oracle-config>
+    <apikit:config name="Router" raml="test" consoleEnabled="true" consolePath="console" keepRamlBaseUri="false" doc:name="Router"/>
+    <http:listener-config name="HTTP_Listener_Configuration1" host="0.0.0.0" port="8097" doc:name="HTTP Listener Configuration"/>
+    <flow name="sonar-code-test-cicd-v3Flow1">
+        <apikit:router config-ref="Router" doc:name="APIkit Router"/>
+    </flow>
     <flow name="sonar-code-test-cicd-v3Flow">
-        <http:listener config-ref="HTTP_Listener_Configuration" path="/" doc:name="HTTP"/>
         <set-payload value="testOutput" doc:name="Set Payload"/>
         <db:insert config-ref="Oracle_Configuration" doc:name="Database">
             <db:dynamic-query/>
         </db:insert>
-        <rollback-exception-strategy doc:name="Rollback Exception Strategy">
-            <set-payload value="roll back been used" doc:name="Set Payload"/>
-        </rollback-exception-strategy>
+    </flow>
+    <flow name="sonar-code-test-cicd-v3Flow2">
+        <http:listener config-ref="HTTP_Listener_Configuration1" path="/" doc:name="HTTP"/>
+        <logger level="INFO" doc:name="Logger"/>
     </flow>
 </mule>
