@@ -18,7 +18,7 @@ http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/a
         <apikit:router config-ref="Router" doc:name="APIkit Router"/>
     </flow>
     <flow name="sonar-code-test-cicd-v3Flow">
-        <set-payload value="testOutput" doc:name="Set Payload"/>
+        <set-payload value="testOutput1" doc:name="Set Payload"/>
         <db:insert config-ref="Oracle_Configuration" doc:name="Database">
             <db:dynamic-query/>
         </db:insert>
